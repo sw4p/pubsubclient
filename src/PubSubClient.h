@@ -88,8 +88,8 @@
 
 class PubSubClient : public Print {
 private:
-   Client* _client;
-   GSM* _GSM_client;
+   Client* _client = NULL;
+   GSM* _GSM_client = NULL;
    uint8_t buffer[MQTT_MAX_PACKET_SIZE];
    uint16_t nextMsgId;
    unsigned long lastOutActivity;
@@ -170,6 +170,7 @@ public:
    boolean unsubscribe(const char* topic);
    boolean loop();
    boolean connected();
+   // boolean GSM_connected();
    int state();
 };
 
