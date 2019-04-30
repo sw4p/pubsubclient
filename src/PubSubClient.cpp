@@ -20,6 +20,12 @@ PubSubClient::PubSubClient(Client& client) {
     this->stream = NULL;
 }
 
+PubSubClient::PubSubClient(GSM& GSM_client) {
+    this->_state = MQTT_DISCONNECTED;
+    setClient(GSM_client);
+    this->stream = NULL;
+}
+
 PubSubClient::PubSubClient(IPAddress addr, uint16_t port, Client& client) {
     this->_state = MQTT_DISCONNECTED;
     setServer(addr, port);
@@ -640,6 +646,11 @@ PubSubClient& PubSubClient::setCallback(MQTT_CALLBACK_SIGNATURE) {
 
 PubSubClient& PubSubClient::setClient(Client& client){
     this->_client = &client;
+    return *this;
+}
+
+PubSubClient& PubSubClient::setClient(GSM& GSM_client){
+    this->_GSM_client = &client;
     return *this;
 }
 
