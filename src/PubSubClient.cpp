@@ -20,7 +20,7 @@ PubSubClient::PubSubClient(Client& client) {
     this->stream = NULL;
 }
 
-PubSubClient::PubSubClient(GSM& GSM_client) {
+PubSubClient::PubSubClient(GSM_Client& GSM_client) {
     this->_state = MQTT_DISCONNECTED;
     setClient(GSM_client);
     this->stream = NULL;
@@ -126,14 +126,7 @@ boolean PubSubClient::connect(const char *id, const char *user, const char *pass
 boolean PubSubClient::connect(const char *id, const char *user, const char *pass, const char* willTopic, uint8_t willQos, boolean willRetain, const char* willMessage, boolean cleanSession) {
     if (!connected()) {
         int result = 0;
-        Client* _client;
-
-        if ( _GSM_client != NULL ) {
-            _client = _GSM_client;
-        } else if ( _client != NULL ) {
-            _client = _client;
-        }
-
+        
         if (domain != NULL) {
             result = _client->connect(this->domain, this->port);
         } else {
@@ -613,20 +606,17 @@ uint16_t PubSubClient::writeString(const char* string, uint8_t* buf, uint16_t po
 
 boolean PubSubClient::connected() {
     boolean rc;
-    if ( _GSM_client != NULL ) {
-        rc = _GSM_client->connected();
-    } else if ( _client != NULL ) {
-        rc = (int)_client->connected();
-    } else {
+    if (_client == NULL ) {
         rc = false;
-    }
-
-    if (!rc) {
-        if (this->_state == MQTT_CONNECTED) {
-            this->_state = MQTT_CONNECTION_LOST;
-            _client->flush();
-            _client->stop();
-        }
+    } else {
+        rc = (int)_client->connected();
+	    if (!rc) {
+	        if (this->_state == MQTT_CONNECTED) {
+	            this->_state = MQTT_CONNECTION_LOST;
+	            _client->flush();
+	            _client->stop();
+	        }
+	    }
     }
     return rc;
 }
@@ -659,8 +649,8 @@ PubSubClient& PubSubClient::setClient(Client& client){
     return *this;
 }
 
-PubSubClient& PubSubClient::setClient(GSM& GSM_client){
-    this->_GSM_client = &GSM_client;
+PubSubClient& PubSubClient::setClient(GSM_Client& GSM_client){
+    this->_client = &GSM_client;
     return *this;
 }
 

@@ -38,6 +38,7 @@ boards and shields, including:
  - Intel Galileo/Edison
  - ESP8266
  - ESP32
+ - SIMCOM SIM800 GSM Module
 
 The library cannot currently be used with hardware based on the ENC28J60 chip –
 such as the Nanode or the Nuelectronics Ethernet Shield. For those, there is an

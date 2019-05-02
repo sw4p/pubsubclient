@@ -11,7 +11,7 @@
 #include "IPAddress.h"
 #include "Client.h"
 #include "Stream.h"
-#include "GSM.h"
+#include "GSM_Client.h"
 
 #define MQTT_VERSION_3_1      3
 #define MQTT_VERSION_3_1_1    4
@@ -89,7 +89,6 @@
 class PubSubClient : public Print {
 private:
    Client* _client = NULL;
-   GSM* _GSM_client = NULL;
    uint8_t buffer[MQTT_MAX_PACKET_SIZE];
    uint16_t nextMsgId;
    unsigned long lastOutActivity;
@@ -114,7 +113,7 @@ private:
 public:
    PubSubClient();
    PubSubClient(Client& client);
-   PubSubClient(GSM& GSM_client);
+   PubSubClient(GSM_Client& client);
    PubSubClient(IPAddress, uint16_t, Client& client);
    PubSubClient(IPAddress, uint16_t, Client& client, Stream&);
    PubSubClient(IPAddress, uint16_t, MQTT_CALLBACK_SIGNATURE,Client& client);
@@ -133,7 +132,7 @@ public:
    PubSubClient& setServer(const char * domain, uint16_t port);
    PubSubClient& setCallback(MQTT_CALLBACK_SIGNATURE);
    PubSubClient& setClient(Client& client);
-   PubSubClient& setClient(GSM& GSM_client);
+   PubSubClient& setClient(GSM_Client& GSM_client);
    PubSubClient& setStream(Stream& stream);
 
    boolean connect(const char* id);
