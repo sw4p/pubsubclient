@@ -12,28 +12,16 @@
  achieve the same result without blocking the main loop.
  
 */
-
-#include <SPI.h>
-#include <Ethernet.h>
 #include <PubSubClient.h>
+#include <SoftwareSerial.h>
 
 // Update these with values suitable for your network.
-byte mac[]    = {  0xDE, 0xED, 0xBA, 0xFE, 0xFE, 0xED };
-IPAddress ip(172, 16, 0, 100);
-IPAddress server(172, 16, 0, 2);
+const char server[] = "server_name";
+uint16_t port = 8080;
 
-void callback(char* topic, byte* payload, unsigned int length) {
-  Serial.print("Message arrived [");
-  Serial.print(topic);
-  Serial.print("] ");
-  for (int i=0;i<length;i++) {
-    Serial.print((char)payload[i]);
-  }
-  Serial.println();
-}
-
-EthernetClient ethClient;
-PubSubClient client(ethClient);
+SoftwareSerial mySerial(8, 7);  // Rx | Tx
+GSM_Client gsmClient(mySerial);
+PubSubClient client(gsmClient);
 
 void reconnect() {
   // Loop until we're reconnected
@@ -43,9 +31,9 @@ void reconnect() {
     if (client.connect("arduinoClient")) {
       Serial.println("connected");
       // Once connected, publish an announcement...
-      client.publish("outTopic","hello world");
+      client.publish("test","hello world");
       // ... and resubscribe
-      client.subscribe("inTopic");
+     // client.subscribe("test");
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
@@ -56,22 +44,31 @@ void reconnect() {
   }
 }
 
+//byte publish_str[] = {0x30, 0x10, 0x00, 0x04, 0x74, 0x65, 0x73, 0x74, 0x68, 0x65, 0x6C, 0x6C, 0x6F, 0x77, 0x6F, 0x72, 0x6C, 0x64, 0x1A};
 void setup()
 {
-  Serial.begin(57600);
+  Serial.begin(9600);
+  delay(1000);
+  mySerial.begin(9600);
+  delay(1000);
+  client.setServer(server, port);
+//  client.setCallback(callback);
+  client.disconnect();
+  if (!client.connected()) {
+    client.connect("client_id", "user_name", "password");
+      //Serial.println("connected");
+      // Once connected, publish an announcement...
+      client.publish("topic","payload");
+//      gsmClient.write(publish_str, sizeof(publish_str));
+      // ... and resubscribe
+     // client.subscribe("test");
+  }
 
-  client.setServer(server, 1883);
-  client.setCallback(callback);
-
-  Ethernet.begin(mac, ip);
   // Allow the hardware to sort itself out
   delay(1500);
 }
 
 void loop()
 {
-  if (!client.connected()) {
-    reconnect();
-  }
-  client.loop();
+  //client.loop();
 }
