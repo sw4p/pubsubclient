@@ -192,30 +192,30 @@ boolean PubSubClient::connect(const char *id, const char *user, const char *pass
 
             write(MQTTCONNECT,buffer,length-MQTT_MAX_HEADER_SIZE);
 
-            lastInActivity = lastOutActivity = millis();
+            // lastInActivity = lastOutActivity = millis();
 
-            while (!_client->available()) {
-                unsigned long t = millis();
-                if (t-lastInActivity >= ((int32_t) MQTT_SOCKET_TIMEOUT*1000UL)) {
-                    _state = MQTT_CONNECTION_TIMEOUT;
-                    _client->stop();
-                    return false;
-                }
-            }
-            uint8_t llen;
-            uint16_t len = readPacket(&llen);
+            // while (!_client->available()) {
+            //     unsigned long t = millis();
+            //     if (t-lastInActivity >= ((int32_t) MQTT_SOCKET_TIMEOUT*1000UL)) {
+            //         _state = MQTT_CONNECTION_TIMEOUT;
+            //         _client->stop();
+            //         return false;
+            //     }
+            // }
+            // uint8_t llen;
+            // uint16_t len = readPacket(&llen);
 
-            if (len == 4) {
-                if (buffer[3] == 0) {
-                    lastInActivity = millis();
-                    pingOutstanding = false;
-                    _state = MQTT_CONNECTED;
-                    return true;
-                } else {
-                    _state = buffer[3];
-                }
-            }
-            _client->stop();
+            // if (len == 4) {
+            //     if (buffer[3] == 0) {
+            //         lastInActivity = millis();
+            //         pingOutstanding = false;
+            //         _state = MQTT_CONNECTED;
+            //         return true;
+            //     } else {
+            //         _state = buffer[3];
+            //     }
+            // }
+            // _client->stop();
         } else {
             _state = MQTT_CONNECT_FAILED;
         }

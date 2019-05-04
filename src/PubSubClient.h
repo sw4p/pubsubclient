@@ -17,9 +17,9 @@
 #define MQTT_VERSION_3_1_1    4
 
 // MQTT_VERSION : Pick the version
-//#define MQTT_VERSION MQTT_VERSION_3_1
+//#define MQTT_VERSION MQTT_VERSION_3_1_1
 #ifndef MQTT_VERSION
-#define MQTT_VERSION MQTT_VERSION_3_1_1
+#define MQTT_VERSION MQTT_VERSION_3_1
 #endif
 
 // MQTT_MAX_PACKET_SIZE : Maximum packet size
@@ -29,7 +29,7 @@
 
 // MQTT_KEEPALIVE : keepAlive interval in Seconds
 #ifndef MQTT_KEEPALIVE
-#define MQTT_KEEPALIVE 15
+#define MQTT_KEEPALIVE 60
 #endif
 
 // MQTT_SOCKET_TIMEOUT: socket timeout interval in Seconds
